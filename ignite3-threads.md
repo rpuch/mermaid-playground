@@ -6,15 +6,15 @@
 
 ```mermaid
 sequenceDiagram
-participant View as *TableView
-participant InternalTableImpl
-participant ReplicaService
-participant MessagingService
-participant ReplicaManager
+participant View as KVView
+participant InternalTable
+participant RepService
+participant MsgService
+participant RepManager
 participant PRL as PartitionReplicaListener
 
-View ->> ReplicaManager: User thread
-ReplicaManager ->> PRL: partition-operations
+View ->> RepManager: User thread
+RepManager ->> PRL: partition-operations
 PRL ->> PRL: partition-operations
 PRL ->> View: partition-operations
 ```
@@ -23,15 +23,15 @@ PRL ->> View: partition-operations
 
 ```mermaid
 sequenceDiagram
-participant View as *TableView
-participant InternalTableImpl
-participant ReplicaService
-participant MessagingService
-participant ReplicaManager
+participant View as *KVView
+participant InternalTable
+participant RepService
+participant MsgService
+participant RepManager
 participant PRL as PartitionReplicaListener
 
-View ->> ReplicaManager: User thread
-ReplicaManager ->> ActionRequestProcessor: partition-operations
+View ->> RepManager: User thread
+RepManager ->> ActionRequestProcessor: partition-operations
 ActionRequestProcessor ->> NodeImpl: JRaft-Request-Processor
 NodeImpl ->> LogManager: JRaft-NodeImpl-Disruptor
 LogManager ->> PartitionListener: JRaft-LogManager-Disruptor
