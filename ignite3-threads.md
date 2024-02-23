@@ -40,3 +40,28 @@ PartitionListener ->> PRL: JRaft-FSMCaller-Disruptor
 PRL ->> PRL: partition-operations
 PRL ->> View: partition-operations
 ```
+
+### SQL get by PK (embedded mode) on partition colocated with current node
+
+```mermaid
+sequenceDiagram
+participant SQLProc as SqlQueryProc
+participant ParserService
+participant PrepareService
+participant ExecutionService
+participant KVGetPlan
+participant InternalTable
+participant RepService
+participant MsgService
+participant RepManager
+participant PRL as PartitionReplicaListener
+
+SQLProc ->> ParserService: User thread
+ParserService ->> PrepareService: sql-execution-pool
+PrepareService ->> PrepareService: sql-planning-pool(X)
+PrepareService ->> KVGetPlan: sql-planning-pool(Y)
+KVGetPlan ->> RepManager: tableManager-io
+RepManager ->> PRL: partition-operations
+PRL ->> PRL: partition-operations
+PRL ->> SQLProc: partition-operations
+```
