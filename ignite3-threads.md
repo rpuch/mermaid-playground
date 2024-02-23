@@ -8,6 +8,8 @@ This is an attempt to use Sequence Diagrams where our components act as particip
 
 If a pool has something in parentheses (like `partition-operations(N)`), this is to highlight that a switch happens to the same pool, but (most likely) to another thread of it.
 
+Traces collected on Ignite 3 corresponding to commit https://github.com/apache/ignite-3/commit/bc0d6e919830b366ceb2cfa28d437d6d2bb95197
+
 ## Normal cases
 
 Normal (or simple) cases are collected here. That is, no cases like 'a `metastorage-watch` thread is highjacked due to a Schema Sync/Primary await/Transactional locks wait/etc).
