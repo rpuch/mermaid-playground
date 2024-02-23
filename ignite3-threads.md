@@ -118,3 +118,10 @@ SQLProc ->> User: sql-execution-pool
  2. Same thing in `SqlQueryProcessor`
  3. In `InternalTableImpl`, after waiting for a primary replica, execution may be switched to `metastorage-watch`
  4. In `PartitionReplicaListener`, after obtaining a transactional lock, execution might be switched to another thread of `partition-operations` (which is probably ok) or to the common FJP (which is not fine)
+
+## Cases to cover
+
+ * DMLs
+ * DDLs?
+ * Network communication
+ * Non-embedded cases
