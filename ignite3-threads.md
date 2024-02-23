@@ -65,3 +65,37 @@ RepManager ->> PRL: partition-operations
 PRL ->> PRL: partition-operations
 PRL ->> SQLProc: partition-operations
 ```
+
+### SQL table scan (embedded mode) on partitions colocated with current node
+
+```mermaid
+sequenceDiagram
+participant User
+participant SQLProc as SqlQueryProc
+participant ParserService
+participant PrepareService
+participant ExecutionService
+participant MultiStepPlan
+participant InternalTable
+participant RepService
+participant MsgService
+participant RepManager
+participant PRL as PartitionReplicaListener
+
+User ->> ParserService: User thread
+ParserService ->> PrepareService: sql-execution-pool
+PrepareService ->> PrepareService: sql-planning-pool(X)
+PrepareService ->> MultiStepPlan: sql-planning-pool(Y)
+MultiStepPlan ->> RepManager: sql-execution-pool
+RepManager ->> PRL: partition-operations(1)
+PRL ->> PRL: partition-operations(1)
+PRL ->> MultiStepPlan: partition-operations(1)
+loop Once per each partition after first (each time on new thread in partition-operations)
+  MultiStepPlan ->> RepManager: partition-operations(N-1)
+  RepManager ->> PRL: partition-operations(N)
+  PRL ->> PRL: partition-operations(N)
+  PRL ->> MultiStepPlan: partition-operations(N)
+end
+MultiStepPlan ->> SQLProc: partition-operations(N)
+SQLProc ->> User: sql-execution-pool
+```
